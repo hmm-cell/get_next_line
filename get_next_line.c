@@ -80,11 +80,11 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = malloc(BUFFER_SIZE + 1);
+	buffer = malloc((size_t)BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	while (!(stash && ft_strchr(stash, '\n')) && bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -97,13 +97,13 @@ char	*get_next_line(int fd)
 		buffer[bytes_read] = '\0';
 		stash = ft_free_and_join(stash, buffer);
 	}
+	free(buffer);
 	if (!stash || !*stash)
 	{
 		free(stash);
 		stash = NULL;
 		return (NULL);
 	}
-	free(buffer);
 	line = get_line(stash);
 	stash = cut_stash(stash);
 	return (line);
