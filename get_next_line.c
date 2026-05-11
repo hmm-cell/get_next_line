@@ -28,25 +28,29 @@ char	*ft_free_and_join(char *stash, char *buffer)
 
 char	*get_line(char	*stash)
 {
-	size_t	ctr;
-	char	*tmp;
+	size_t	i;
 	char	*line;
 
-	ctr = 0;
-	while (stash[ctr] && stash[ctr] != '\n')
-		ctr++;
-	line = malloc(ctr + 2);
-	tmp = line;
-	while (*stash)
+	if (!stash || !*stash)
+		return (NULL);
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	line = malloc(i + 2);
+		if (!line)
+			return (NULL);
+	i = 0;
+	while (stash[i])
 	{
-		if (*stash == '\n')
+		if (stash[i] == '\n')
 			break ;
-		*line++ = *stash++;
+		line[i] = stash[i];
+		i++;
 	}
-	if (*stash == '\n')
-		*line++ = '\n';
-	*line = '\0';
-	return (tmp);
+	if (stash[i] == '\n')
+		line[i++] = '\n';
+	line[i] = '\0';
+	return (line);
 }
 
 char	*cut_stash(char *stash)
@@ -54,21 +58,16 @@ char	*cut_stash(char *stash)
 	size_t	i;
 	char	*str;
 
-	if (!stash)
-		return (NULL);
 	i = 0;
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	str = malloc((ft_strlen(stash) - i));
-	if (!str)
-		return (NULL);
-	if (stash[i])
-		ft_strlcpy(str, &stash[i + 1], (ft_strlen(stash) - i));
-	else
+	if (!stash[i] || !stash[i + 1])
 	{
 		free(stash);
 		return (NULL);
 	}
+	str = ft_strdup(&stash[i + 1]);
+	free(stash)
 	return (str);
 }
 
